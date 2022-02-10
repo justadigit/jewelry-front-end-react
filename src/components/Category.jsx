@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { LocalContext } from '../App';
 const Container = styled.div`
   width: 80%;
   margin: auto;
@@ -11,8 +12,9 @@ const Container = styled.div`
 `;
 const Header = styled.span`
   padding: 10px 15px;
-  background: #aae798;
-  color: blueviolet;
+  background: #ffd60a;
+  color: #000814;
+  font-weight: 600;
 `;
 const List = styled.ul`
   display: flex;
@@ -27,6 +29,7 @@ const ListItem = styled.li`
 `;
 
 const Category = () => {
+  const t = useContext(LocalContext);
   const [categories, setcategorie] = useState([]);
   useEffect(() => {
     axios
@@ -37,7 +40,7 @@ const Category = () => {
   }, [categories]);
   return (
     <Container>
-      <Header>Categories : </Header>
+      <Header>{t('ccategories')} : </Header>
       <List>
         {categories.map((category) => (
           <ListItem key={category._id}>

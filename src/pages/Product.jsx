@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React from 'react';
+
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ProductList from '../components/ProductList';
-import JADE from '../images/jade.png';
+
 const Container = styled.div`
   width: 80%;
   margin: auto;
@@ -12,17 +12,19 @@ const Container = styled.div`
 `;
 
 const Product = () => {
+  const [loading, setLoading] = useState(true);
   const [products, setProduct] = useState([]);
   useEffect(() => {
     axios
-      .get('https://jewelry-second-step.herokuapp.com/admin/all-items-api')
+      .get('https://jewelry-second-step.herokuapp.com/admin/all-items')
       .then((response) => {
         setProduct(response.data.result);
+        setLoading(false);
       });
-  }, [products]);
+  }, []);
   return (
     <Container>
-      <ProductList products={products} />
+      {loading ? 'Loading....' : <ProductList products={products} />}
     </Container>
   );
 };

@@ -1,5 +1,4 @@
 import {
-  ExpandMore,
   Facebook,
   LinkedIn,
   Mail,
@@ -7,11 +6,14 @@ import {
   Pinterest,
   Twitter,
 } from '@material-ui/icons';
+import i18next from 'i18next';
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 const Container = styled.div`
   width: 100%;
-  background-color: #f5f5f5;
+  color: #000814;
+  background-color: #ffd60a;
 `;
 const Head = styled.div`
   width: 60%;
@@ -61,21 +63,24 @@ const SocialIcon = styled.div`
     font-size: 18px !important;
   }
 `;
-const Language = styled.div`
+const Language = styled.select`
   font-size: 13px;
   padding: 0 15px;
   display: flex;
-  border-left: 1px solid gray;
+  border: none;
+  background: none;
+  margin-right: 15px;
 `;
-const LanguageIcon = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0 5px;
+const LanguageList = styled.option``;
+// const LanguageIcon = styled.div`
+//   display: flex;
+//   align-items: center;
+//   margin: 0 5px;
 
-  & > * {
-    font-size: 18px !important;
-  }
-`;
+//   & > * {
+//     font-size: 18px !important;
+//   }
+// `;
 const Auth = styled.div`
   padding: 0 15px;
   display: flex;
@@ -118,17 +123,25 @@ const HeadNavbar = () => {
               <Pinterest />
             </SocialIcon>
           </Social>
-          <Language>
-            English
-            <LanguageIcon>
-              <ExpandMore />
-            </LanguageIcon>
+          <Language onChange={(e) => i18next.changeLanguage(e.target.value)}>
+            <LanguageList value="mm">Myanmar</LanguageList>
+            <LanguageList value="en">English</LanguageList>
           </Language>
           <Auth>
             <PersonIcon>
               <Person />
             </PersonIcon>
-            Login
+            <Link
+              to="/login"
+              style={{
+                textDecoration: 'none',
+                active: { color: 'none' },
+                link: { color: 'none' },
+              }}
+            >
+              {' '}
+              Login
+            </Link>
           </Auth>
         </Right>
       </Head>

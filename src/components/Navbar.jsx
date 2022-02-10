@@ -1,13 +1,11 @@
 import {
-  Favorite,
   FavoriteBorderOutlined,
-  FavoriteOutlined,
-  ShoppingCart,
   ShoppingCartOutlined,
 } from '@material-ui/icons';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { LocalContext } from '../App';
 const Container = styled.div`
   width: 80%;
   margin: auto;
@@ -15,6 +13,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0px 40px;
+  color: #000814;
 `;
 
 const Logo = styled.h1`
@@ -23,9 +22,14 @@ const Logo = styled.h1`
 const List = styled.ul`
   display: flex;
   list-style: none;
+  a {
+    text-decoration: none;
+    color: black;
+    padding: 5px 20px;
+  }
 `;
 const ListItem = styled.li`
-  margin: 25px;
+  margin: 25px 15px;
   font-weight: bold;
   cursor: pointer;
 `;
@@ -64,19 +68,40 @@ const ShopText = styled.span`
 `;
 
 const Navbar = () => {
+  const t = useContext(LocalContext);
   return (
     <Container>
       <Logo>
-        <Link style={{ textDecoration: 'none', color: 'black' }} to="/">
+        <NavLink style={{ textDecoration: 'none', color: '#000814' }} to="/">
           Jewelry
-        </Link>
+        </NavLink>
       </Logo>
       <List>
-        <ListItem>HOME</ListItem>
-        <ListItem>SHOP</ListItem>
-        <ListItem>PAGES</ListItem>
-        <ListItem>BLOG</ListItem>
-        <ListItem>CONTACT</ListItem>
+        <ListItem>
+          <NavLink
+            to="/"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? ' #f8f8f8' : '',
+              borderBottom: isActive ? ' 1px solid #cecece' : '',
+            })}
+          >
+            {t('nhome')}
+          </NavLink>
+        </ListItem>
+        <ListItem>
+          <NavLink
+            to="/shop"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? ' #f8f8f8' : '',
+              borderBottom: isActive ? ' 1px solid #cecece' : '',
+            })}
+          >
+            {t('nshop')}
+          </NavLink>
+        </ListItem>
+        <ListItem>{t('npages')}</ListItem>
+        <ListItem>{t('nblog')}</ListItem>
+        <ListItem>{t('ncontact')}</ListItem>
       </List>
       <Shop>
         <ShopIcon>

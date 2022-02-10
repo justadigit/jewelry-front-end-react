@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { LocalContext } from '../App';
 const Header = styled.div`
   color: gray;
   width: 100%;
@@ -33,7 +34,7 @@ const ProductItem = styled.div`
   margin-top: 15px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #c8c8c8;
+  border: 2px solid #ffc300;
   border-radius: 5px;
   padding-bottom: 20px;
 `;
@@ -53,12 +54,14 @@ const ItemImage = styled.img`
 const ItemButton = styled.button`
   width: 90%;
   margin: 5px auto;
-  background-color: white;
+
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid #ffc300;
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
+  color: #0069cc;
+  background: none;
 `;
 const ItemName = styled.span`
   font-weight: bold;
@@ -75,6 +78,7 @@ const ItemPrice = styled.span`
   font-weight: 600;
 `;
 const ProductList = (props) => {
+  const t = useContext(LocalContext);
   return (
     <>
       <Header>
@@ -98,10 +102,10 @@ const ProductList = (props) => {
             </ItemImageWrapper>
             <ItemButton>
               <Link
-                style={{ textDecoration: 'none', color: 'black' }}
+                style={{ textDecoration: 'none', color: '#0069cc' }}
                 to={`/details/${product._id}`}
               >
-                QUICKVIEW
+                {t('quickview')}
               </Link>
             </ItemButton>
             <ItemName>{product.title}</ItemName>

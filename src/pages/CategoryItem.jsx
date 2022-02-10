@@ -22,14 +22,14 @@ const CategoryItem = () => {
         setcatProducts(response.data.items);
         setLoading(false);
       });
-  }, [catProducts]);
+  }, [catId]);
   return (
     <>
       <HeadNavbar />
       <Navbar />
       <Category />
       <Container>
-        {loading?"Loading....":<CatProductList products={catProducts} />}
+        {loading ? 'Loading...' : <CatProductList products={catProducts} />}
       </Container>
     </>
   );
