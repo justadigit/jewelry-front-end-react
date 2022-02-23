@@ -131,17 +131,30 @@ const HeadNavbar = () => {
             <PersonIcon>
               <Person />
             </PersonIcon>
-            <Link
-              to="/login"
-              style={{
-                textDecoration: 'none',
-                active: { color: 'none' },
-                link: { color: 'none' },
-              }}
-            >
-              {' '}
-              Login
-            </Link>
+
+            {sessionStorage.getItem('email') ? (
+              <Link
+                to={`/user/${sessionStorage.getItem('userId')}`}
+                style={{
+                  textDecoration: 'none',
+                  active: { color: 'none' },
+                  link: { color: 'none' },
+                }}
+              >
+                {sessionStorage.getItem('name')}
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                style={{
+                  textDecoration: 'none',
+                  active: { color: 'none' },
+                  link: { color: 'none' },
+                }}
+              >
+                Login
+              </Link>
+            )}
           </Auth>
         </Right>
       </Head>

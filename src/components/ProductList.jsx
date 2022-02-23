@@ -78,7 +78,7 @@ const ItemPrice = styled.span`
   font-weight: 600;
 `;
 const ProductList = (props) => {
-  const t = useContext(LocalContext);
+  const [t] = useContext(LocalContext);
   return (
     <>
       <Header>

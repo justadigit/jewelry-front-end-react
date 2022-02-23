@@ -29,7 +29,7 @@ const ListItem = styled.li`
 `;
 
 const Category = () => {
-  const t = useContext(LocalContext);
+  const [t] = useContext(LocalContext);
   const [categories, setcategorie] = useState([]);
   useEffect(() => {
     axios

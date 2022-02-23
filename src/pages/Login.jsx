@@ -1,6 +1,13 @@
-import { NavLink } from 'react-router-dom';
+import { ErrorMessage, Form, Formik } from 'formik';
+import * as Yup from 'yup';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 import BACK from '../images/back3.jpg';
+import TextError from './TextError';
+import axios from 'axios';
+import { useEffect } from 'react';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -47,7 +54,8 @@ const Title = styled.h1`
   font-size: 24px;
   font-weight: 400;
 `;
-const Form = styled.form`
+
+const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -87,8 +95,58 @@ const GoHome = styled.span`
   }
 `;
 const Login = () => {
+  useEffect(() => {
+    const register = sessionStorage.getItem('register');
+    if (register) {
+      toast.success(' Successfully! Please Login!');
+      sessionStorage.removeItem('register');
+    }
+  }, []);
+  let navigate = useNavigate();
+  const initialValues = {
+    email: '',
+    password: '',
+  };
+
+  const onSubmit = (values, onSubmitProps) => {
+    const data = JSON.stringify(values);
+    onSubmitProps.setSubmitting(true);
+    axios
+      .post('https://jewelry-third-step.herokuapp.com/api/auth/login', data, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then((response) => {
+        console.log('Success', response.data);
+        if (response.data.error) {
+          toast.error(response.data.message);
+        } else {
+          sessionStorage.setItem('userId', response.data.userId);
+          sessionStorage.setItem('name', response.data.name);
+          sessionStorage.setItem('email', response.data.email);
+          onSubmitProps.resetForm({
+            email: '',
+            password: '',
+          });
+          navigate('/user/' + response.data.userId);
+        }
+        onSubmitProps.setSubmitting(false);
+      })
+      .catch((error) => {
+        console.log('Error', error.message());
+        toast.error('Something Wrong!Please Try Again!');
+        onSubmitProps.setSubmitting(false);
+      });
+  };
+  const validationSchema = Yup.object({
+    email: Yup.string().email('Invalid email format').required('Required'),
+    password: Yup.string().required('Required'),
+  });
+
   return (
     <Container>
+      <ToastContainer position="top-center" />
       <Wrapper>
         <NavUnlisted>
           <NavItem>
@@ -115,16 +173,50 @@ const Login = () => {
           </NavItem>
         </NavUnlisted>
         <Title>Login</Title>
-        <Form autoComplete="off">
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <ButtonGroup>
-            <Button>LOGIN</Button>
-            <GoHome>
-              <NavLink to="/">Go Back</NavLink>
-            </GoHome>
-          </ButtonGroup>
-        </Form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => (
+            <Form autoComplete="off">
+              <InputGroup>
+                <Input
+                  type="text"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formik.values.email}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                />
+                <ErrorMessage name="email">
+                  {(msg) => <TextError>{msg}</TextError>}
+                </ErrorMessage>
+              </InputGroup>
+              <InputGroup>
+                <Input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formik.values.password}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                />
+                <ErrorMessage name="password" component={TextError} />
+              </InputGroup>
+              <ButtonGroup>
+                <Button disabled={!formik.isValid || formik.isSubmitting}>
+                  Login
+                </Button>
+                <GoHome>
+                  <NavLink to="/">Go Back</NavLink>
+                </GoHome>
+              </ButtonGroup>
+            </Form>
+          )}
+        </Formik>
       </Wrapper>
     </Container>
   );

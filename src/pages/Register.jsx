@@ -1,8 +1,14 @@
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Formik, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import axios from 'axios';
-import { useReducer, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import TextError from './TextError';
+
 import styled from 'styled-components';
 import BACK from '../images/back3.jpg';
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -49,7 +55,7 @@ const Title = styled.h1`
   font-size: 24px;
   font-weight: 400;
 `;
-const Form = styled.form`
+const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -69,6 +75,11 @@ const ButtonGroup = styled.div`
   justify-content: space-between;
 `;
 const Button = styled.button`
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #eec800;
+    color: gray;
+  }
   margin-top: 20px;
   width: 40%;
   border: none;
@@ -78,6 +89,7 @@ const Button = styled.button`
   color: black;
   font-weight: bold;
 `;
+
 const GoHome = styled.span`
   margin-top: 20px;
   border: none;
@@ -91,51 +103,63 @@ const GoHome = styled.span`
     color: black;
   }
 `;
-const initialFormState = {
-  name: '',
-  email: '',
-  password: '',
-};
-const formReducer = (state, action) => {
-  switch (action.type) {
-    case 'HANDLE INPUT TEXT':
-      return {
-        ...state,
-        [action.field]: action.payload,
-      };
-    default:
-      return state;
-  }
-};
-const Register = () => {
-  const [formState, dispatch] = useReducer(formReducer, initialFormState);
-  const [isLoading, setIsLoading] = useState(false);
-  const handleTextChange = (e) => {
-    dispatch({
-      type: 'HANDLE INPUT TEXT',
-      field: e.target.name,
-      payload: e.target.value,
-    });
+
+function Register() {
+  let navigate = useNavigate();
+  const initialValues = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let data = JSON.stringify(formState);
-    setIsLoading(true);
+
+  const onSubmit = (values, onSubmitProps) => {
+    const data = JSON.stringify(values);
+    onSubmitProps.setSubmitting(true);
+    console.log('Submit', onSubmitProps);
     axios
-      .post('https://jewelry-third-step.herokuapp.com/api/sign-up', data)
-      .then((res) => {
-        if (res) {
-          console.log(res);
-          setIsLoading(false);
-        }
+      .post('https://jewelry-third-step.herokuapp.com/api/auth/sign-up', data, {
+        headers: {
+          'content-type': 'application/json',
+        },
       })
-      .catch((err) => {
-        console.log(err.message);
-        setIsLoading(false);
+      .then((response) => {
+        console.log('Success', response.data);
+        if (response.data.error) {
+          toast.error(response.data.message);
+        } else {
+          sessionStorage.setItem('register', true);
+          onSubmitProps.resetForm({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+          });
+          navigate('/login');
+        }
+        onSubmitProps.setSubmitting(false);
+      })
+      .catch((error) => {
+        console.log('Error', error);
+        toast.error('Something Wrong!Please Try Again!');
+        onSubmitProps.setSubmitting(false);
       });
   };
+
+  const validationSchema = Yup.object({
+    name: Yup.string().min(6, ' at least 6').required('Required'),
+    email: Yup.string().email('Invalid email format').required('Required'),
+    password: Yup.string()
+      .min(6, ' at least 6 charactors')
+      .required('Required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), ''], 'Password must match!')
+      .required('Required'),
+  });
+
   return (
     <Container>
+      <ToastContainer position="top-center" />
       <Wrapper>
         <NavUnlisted>
           <NavItem>
@@ -161,45 +185,85 @@ const Register = () => {
             </NavLink>
           </NavItem>
         </NavUnlisted>
-        <Title>Create Account</Title>
-        <Form autoComplete="off" onSubmit={handleSubmit}>
-          <Input
-            placeholder="name"
-            type="text"
-            name="name"
-            value={formState.name}
-            onChange={(e) => handleTextChange(e)}
-          />
-          <Input
-            placeholder="email"
-            type="email"
-            name="email"
-            value={formState.email}
-            onChange={(e) => handleTextChange(e)}
-          />
-          <Input
-            placeholder="password"
-            type="password"
-            name="password"
-            value={formState.password}
-            onChange={(e) => handleTextChange(e)}
-          />
-          <Input placeholder="confirm password" />
-          <Agreement>
-            By creating an account, I consent to the processing of my personal
-            data in accordance with the{' '}
-            <b style={{ cursor: 'pointer' }}>PRIVACY POLICY</b>
-          </Agreement>
-          <ButtonGroup>
-            <Button>{isLoading ? 'Loading...' : 'LOGIN'}</Button>
-            <GoHome>
-              <NavLink to="/">Go Back</NavLink>
-            </GoHome>
-          </ButtonGroup>
-        </Form>
+        <Title>Register</Title>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => (
+            <Form autoComplete="off">
+              <InputGroup>
+                <Input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Name"
+                  value={formik.values.name}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                />
+                <ErrorMessage name="name" component={TextError} />
+              </InputGroup>
+              <InputGroup>
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formik.values.email}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                />
+                <ErrorMessage name="email" component={TextError} />
+              </InputGroup>
+              <InputGroup>
+                <Input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Passowrd"
+                  value={formik.values.password}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                />
+                <ErrorMessage name="password" component={TextError} />
+              </InputGroup>
+              <InputGroup>
+                <Input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={formik.values.confirmPassword}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                />
+                <ErrorMessage name="confirmPassword" component={TextError} />
+              </InputGroup>
+              <Agreement>
+                By creating an account, I consent to the processing of my
+                personal data in accordance with the
+                <b style={{ cursor: 'pointer' }}> PRIVACY POLICY</b>
+              </Agreement>
+              <ButtonGroup>
+                <Button
+                  type="submit"
+                  disabled={!formik.isValid || formik.isSubmitting}
+                >
+                  Register
+                </Button>
+
+                <GoHome>
+                  <NavLink to="/">Go Back</NavLink>
+                </GoHome>
+              </ButtonGroup>
+            </Form>
+          )}
+        </Formik>
       </Wrapper>
     </Container>
   );
-};
+}
 
 export default Register;

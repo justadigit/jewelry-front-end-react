@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import BACK from '../images/back3.jpg';
 const Container = styled.div`
@@ -66,8 +67,19 @@ const Intro = () => {
           find the best ring for your budget & enjoy free shipping and returns.
         </Paragraph>
         <ButtonGroup>
-          <Button>Sale Now </Button>
-          <Button>Buy Now</Button>
+          <Button>
+            <Link
+              to="/user/:uId"
+              style={{ textDecoration: 'none', color: 'black' }}
+            >
+              Sale Now
+            </Link>
+          </Button>
+          <Button>
+            <Link to="/shop" style={{ textDecoration: 'none', color: 'black' }}>
+              Buy Now
+            </Link>
+          </Button>
         </ButtonGroup>
       </Group>
     </Container>

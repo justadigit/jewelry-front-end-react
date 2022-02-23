@@ -6,10 +6,15 @@ import HttpApi from 'i18next-http-backend';
 import CategoryItem from './pages/CategoryItem';
 import Details from './pages/Details';
 import Home from './pages/Home';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Shop from './pages/Shop';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import User from './pages/user/User';
+import PageNotFound from './pages/PageNotFound';
+
+import ProtectedRoutes from './protected/ProtectedRouted';
+import axios from 'axios';
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -34,9 +39,10 @@ i18n
 export const LocalContext = React.createContext();
 function App() {
   const { t } = useTranslation();
+
   return (
-    <div>
-      <LocalContext.Provider value={t}>
+    <>
+      <LocalContext.Provider value={[t]}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home t={t} />} />
@@ -45,10 +51,14 @@ function App() {
             <Route path="/shop" element={<Shop />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="*" element={<PageNotFound />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route exact path="/user/:uId" element={<User />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </LocalContext.Provider>
-    </div>
+    </>
   );
 }
 
