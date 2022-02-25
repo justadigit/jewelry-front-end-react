@@ -27,7 +27,7 @@ const Products = styled.div`
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 const ProductItem = styled.div`
   width: 23%;
@@ -96,7 +96,7 @@ const ProductList = (props) => {
             <ItemImageWrapper>
               <ItemImage
                 src={
-                  'https://jewelry-second-step.herokuapp.com/' + product.image
+                  'https://jewelry-third-step.herokuapp.com/' + product.image
                 }
               />
             </ItemImageWrapper>

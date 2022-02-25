@@ -11,19 +11,25 @@ const Container = styled.div`
   align-items: center;
 `;
 const Header = styled.span`
+  flex: 1;
   padding: 10px 15px;
   background: #ffd60a;
   color: #000814;
   font-weight: 600;
 `;
 const List = styled.ul`
+  flex: 10;
+  padding: 10px 0;
   display: flex;
+  align-items: center;
   list-style: none;
   margin-left: 15px;
 `;
 const ListItem = styled.li`
+  display: flex;
+  padding: 0 5px 5px 5px;
+  align-items: center;
   margin-left: 1px;
-  padding: 5px;
   background-color: #e8e8e8;
   cursor: pointer;
 `;
@@ -33,9 +39,9 @@ const Category = () => {
   const [categories, setcategorie] = useState([]);
   useEffect(() => {
     axios
-      .get('https://jewelry-second-step.herokuapp.com/admin/all-categories')
+      .get('https://jewelry-third-step.herokuapp.com/api/categories')
       .then((response) => {
-        setcategorie(response.data.result);
+        setcategorie(response.data.categories);
       });
   }, [categories]);
   return (

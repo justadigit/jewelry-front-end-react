@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   width: 80%;
   margin: auto;
+  margin-top: 50px;
   display: flex;
   justify-content: center;
 `;
@@ -107,9 +108,10 @@ export const PostDesc = styled.div`
 `;
 export const PostType = styled.span`
   background-color: lightblue;
+  font-size: 13px;
   font-weight: 600;
-  width: 10%;
-  padding: 2px 3px;
+  width: 18%;
+  padding: 4px 3px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,7 +136,7 @@ export const PostButtonGroup = styled.div`
   justify-content: end;
 `;
 export const PostVisible = styled.span`
-  background: ${(props) => (props.vkey === 'approve' ? '#1fae51' : 'black')};
+  background: ${(props) => (props.vkey ? '#1fae51' : '#ffdf00')};
   color: white;
   font-size: 8px;
   font-weight: 600;
@@ -151,4 +153,55 @@ export const PostButton = styled.button`
   font-size: 13px;
   font-weight: 600;
   border-radius: 5px;
+`;
+
+//for add new post form
+export const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+export const Input = styled.input`
+  flex: 1;
+  height: 20px;
+  margin: 20px 10px 0px 0px;
+  padding: 10px;
+`;
+export const TextArea = styled.textarea`
+  flex: 1;
+  height: 20px;
+  margin: 20px 10px 0px 0px;
+  padding: 10px;
+`;
+export const File = styled.input`
+  flex: 1;
+  height: 20px;
+  margin: 20px 10px 0px 0px;
+  padding: 10px;
+`;
+export const Select = styled.select`
+  flex: 1;
+  height: 20px;
+  margin: 20px 10px 0px 0px;
+  padding: 10px;
+`;
+export const Option = styled.option``;
+export const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+export const Button = styled.button`
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #eec800;
+    color: gray;
+  }
+  margin-top: 20px;
+  width: 40%;
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  background-color: gold;
+  color: black;
+  font-weight: bold;
 `;

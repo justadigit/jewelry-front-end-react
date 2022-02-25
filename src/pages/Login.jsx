@@ -72,6 +72,11 @@ const ButtonGroup = styled.div`
   justify-content: space-between;
 `;
 const Button = styled.button`
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #eec800;
+    color: gray;
+  }
   margin-top: 20px;
   width: 40%;
   border: none;

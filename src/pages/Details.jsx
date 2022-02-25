@@ -120,17 +120,16 @@ const Details = () => {
   let { pid } = useParams();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState({});
-  const [relatedImage, setRelatedImage] = useState([]);
-  const t = useContext(LocalContext);
+  const [t] = useContext(LocalContext);
+  console.log(pid);
   useEffect(() => {
     axios
-      .get('https://jewelry-second-step.herokuapp.com/item/' + pid)
+      .get('https://jewelry-third-step.herokuapp.com/api/post/' + pid)
       .then((response) => {
-        setProduct(response.data.item);
-        setRelatedImage(response.data.item.relatedImg);
+        setProduct(response.data.post);
         setLoading(false);
       });
-  }, [pid, product, relatedImage]);
+  }, [pid, product]);
   return (
     <>
       <HeadNavbar />
@@ -158,18 +157,17 @@ const Details = () => {
                 <div className="rimage">
                   <img
                     src={
-                      `https://jewelry-second-step.herokuapp.com/` +
+                      `https://jewelry-third-step.herokuapp.com/` +
                       product.image
                     }
                     alt=""
                   />
                 </div>
-                {relatedImage.map((relatedImg, key) => (
+                {product.relatedImg.map((relatedImg, key) => (
                   <div className="rimage" key={key}>
                     <img
                       src={
-                        `https://jewelry-second-step.herokuapp.com/` +
-                        relatedImg
+                        `https://jewelry-third-step.herokuapp.com/` + relatedImg
                       }
                       alt=""
                     />

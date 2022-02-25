@@ -6,7 +6,7 @@ import HttpApi from 'i18next-http-backend';
 import CategoryItem from './pages/CategoryItem';
 import Details from './pages/Details';
 import Home from './pages/Home';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Shop from './pages/Shop';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -14,7 +14,7 @@ import User from './pages/user/User';
 import PageNotFound from './pages/PageNotFound';
 
 import ProtectedRoutes from './protected/ProtectedRouted';
-import axios from 'axios';
+
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
