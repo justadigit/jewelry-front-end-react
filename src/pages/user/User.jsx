@@ -47,20 +47,17 @@ const User = () => {
   const [user, setUser] = useState({});
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState({});
-  const [loading, setLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   useEffect(() => {
     const suserId = sessionStorage.getItem('userId');
     if (suserId === uId) {
-      setLoading(true);
       axios
         .get(`https://jewelry-third-step.herokuapp.com/api/user/${uId}`)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           setUser(response.data.info);
           setItems(response.data.items);
           setCategories(response.data.categories);
-          setLoading(false);
         });
     } else {
       navigate('/*');
@@ -85,9 +82,9 @@ const User = () => {
   const initialValues = {
     categoryId: ``,
     userId: `${user.userId}`,
-    title: '2',
-    description: '2',
-    price: 0,
+    title: '',
+    description: '',
+    price: '',
     mainImage: '',
     relatedImage: '',
   };
@@ -102,8 +99,9 @@ const User = () => {
       .required('Required'),
   });
   const onSubmit = async (values, onSubmitProps) => {
+    //console.log('onSubmitPorps', onSubmitProps);
+    onSubmitProps.setSubmitting(true);
     const formData = new FormData();
-
     formData.append('categoryId', values.categoryId);
     formData.append('userId', values.userId);
     formData.append('title', values.title);
@@ -117,9 +115,9 @@ const User = () => {
     // values.relatedImage.forEach((photo, index) => {
     //   formData.append(`relatedImage[${index}]`, values.relatedImage[index]);
     // });
-    console.log('formdata', formData.get('relatedImage'));
-    console.log('values', values);
-    onSubmitProps.setSubmitting(true);
+    // console.log('formdata', formData.get('relatedImage'));
+    // console.log('values', values);
+
     axios.defaults.headers.post['Accept'] = 'application/json';
     axios({
       method: 'post',
@@ -130,7 +128,7 @@ const User = () => {
       },
     })
       .then((response) => {
-        console.log('Success', response.data);
+        //console.log('Success', response.data);
         if (response.data.error) {
           toast.error(response.data.message);
         } else {
@@ -144,15 +142,35 @@ const User = () => {
           setAddForm(false);
           toast.success(response.data.message);
         }
+        onSubmitProps.setSubmitting(false);
       })
       .cathc((err) => {
         toast.error('Something Wrong!Please Try Again!');
         onSubmitProps.setSubmitting(false);
       });
   };
-  return loading ? (
-    'Loading...'
-  ) : (
+
+  //Delete Request
+  function handleDelete(postId) {
+    axios({
+      method: 'delete',
+      url: `https://jewelry-third-step.herokuapp.com/api/post/${postId}/${user.userId}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        setRefreshKey((oldKey) => oldKey + 1);
+        toast.success(response.data.message);
+        //console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.success(err.message);
+      });
+  }
+
+  return (
     <>
       <ToastContainer position="top-center" />
       <UserNav logout={handleLogout} />
@@ -181,31 +199,49 @@ const User = () => {
               <big>+</big> Add New Post
             </AddButton>
           </Head>
-          <PostsTable>
-            {items.map((item) => (
-              <Post key={item._id}>
-                <PostInfo>
-                  <PostDate>Feb 10,2022</PostDate>
-                  <PostTitle>{item.title}</PostTitle>
-                  <PostDesc>{item.description}</PostDesc>
-                  <PostType>{item.categoryId.title}</PostType>
-                  <PostButtonGroup>
-                    <PostVisible vkey={item.state}>
-                      {item.state ? 'Approved' : 'Pending'}
-                    </PostVisible>
-                    <PostButton color="#09aeae">Detail</PostButton>
-                    <PostButton color="#044cd0">Update</PostButton>
-                    <PostButton color="#d72503">Delete</PostButton>
-                  </PostButtonGroup>
-                </PostInfo>
-                <PostImgCover>
-                  <PostImage
-                    src={`https://jewelry-third-step.herokuapp.com/${item.image}`}
-                  />
-                </PostImgCover>
-              </Post>
-            ))}
-          </PostsTable>
+          {items.length === 0 ? (
+            <h2
+              style={{
+                display: 'flex',
+                alignItem: 'center',
+                justifyContent: 'center',
+                color: 'lightgray',
+              }}
+            >
+              No Post!Create Something Special!
+            </h2>
+          ) : (
+            <PostsTable>
+              {items.map((item) => (
+                <Post key={item._id}>
+                  <PostInfo>
+                    <PostDate>Feb 10,2022</PostDate>
+                    <PostTitle>{item.title}</PostTitle>
+                    <PostDesc>{item.description}</PostDesc>
+                    <PostType>{item.categoryId.title}</PostType>
+                    <PostButtonGroup>
+                      <PostVisible vkey={item.state}>
+                        {item.state ? 'Approved' : 'Pending'}
+                      </PostVisible>
+                      <PostButton color="#09aeae">Detail</PostButton>
+                      <PostButton color="#044cd0">Update</PostButton>
+                      <PostButton
+                        color="#d72503"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        Delete
+                      </PostButton>
+                    </PostButtonGroup>
+                  </PostInfo>
+                  <PostImgCover>
+                    <PostImage
+                      src={`https://jewelry-third-step.herokuapp.com/${item.image}`}
+                    />
+                  </PostImgCover>
+                </Post>
+              ))}
+            </PostsTable>
+          )}
         </Posts>
 
         {/* for adding new post (modal form) */}

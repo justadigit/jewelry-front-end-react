@@ -13,22 +13,13 @@ import { Navigate, Outlet } from 'react-router-dom';
 const ProtectedRoutes = () => {
   //const isAuth = useAuth(auth);
   const [userId, setUserId] = useState([]);
-  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    setLoading(true);
-    if (sessionStorage.length > 0) {
-      setUserId(sessionStorage.userId);
-      setLoading(false);
-    }
-    setLoading(false);
+    setUserId(sessionStorage.getItem('userId'));
   }, []);
   // console.log(userId);
 
-  if (loading) {
-    return 'Loading...';
-  } else {
-    return userId !== null ? <Outlet /> : <Navigate to="/login" />;
-  }
+  return userId ? <Outlet /> : <Navigate to="/login" />;
   //return 'hello';
 };
 
