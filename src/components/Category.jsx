@@ -12,6 +12,7 @@ const Container = styled.div`
 `;
 const Header = styled.span`
   flex: 1;
+  display: flex;
   padding: 10px 15px;
   background: #ffd60a;
   color: #000814;
@@ -21,21 +22,21 @@ const List = styled.ul`
   flex: 10;
   padding: 10px 0;
   display: flex;
-  align-items: center;
   list-style: none;
+  margin: 0;
   margin-left: 15px;
 `;
 const ListItem = styled.li`
   display: flex;
-  padding: 0 5px 5px 5px;
-  align-items: center;
+  align-items: flex-end;
+  padding: 5px 8px;
   margin-left: 1px;
   background-color: #e8e8e8;
   cursor: pointer;
 `;
 
 const Category = () => {
-  const [t] = useContext(LocalContext);
+  const { t } = useContext(LocalContext);
   const [categories, setcategorie] = useState([]);
   useEffect(() => {
     axios
@@ -43,7 +44,7 @@ const Category = () => {
       .then((response) => {
         setcategorie(response.data.categories);
       });
-  }, [categories]);
+  }, []);
   return (
     <Container>
       <Header>{t('ccategories')} : </Header>

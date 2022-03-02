@@ -17,10 +17,11 @@ const CategoryItem = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios
-      .get('https://jewelry-second-step.herokuapp.com/cate/' + catId)
+      .get('https://jewelry-third-step.herokuapp.com/api/category/' + catId)
       .then((response) => {
         setcatProducts(response.data.items);
         setLoading(false);
+        console.log(response.data.items);
       });
   }, [catId]);
   return (

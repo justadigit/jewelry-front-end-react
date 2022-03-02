@@ -4,7 +4,7 @@ import { useTranslation, initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 import CategoryItem from './pages/CategoryItem';
-import Details from './pages/Details';
+import Details from './pages/detail/Details';
 import Home from './pages/Home';
 import React from 'react';
 import Shop from './pages/Shop';
@@ -14,6 +14,8 @@ import User from './pages/user/User';
 import PageNotFound from './pages/PageNotFound';
 
 import ProtectedRoutes from './protected/ProtectedRouted';
+import { useState } from 'react';
+import PostDetail from './pages/user/PostDetail';
 
 i18n
   .use(initReactI18next)
@@ -39,10 +41,10 @@ i18n
 export const LocalContext = React.createContext();
 function App() {
   const { t } = useTranslation();
-
+  const [token, setToken] = useState(null);
   return (
     <>
-      <LocalContext.Provider value={[t]}>
+      <LocalContext.Provider value={{ t, token, setToken }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home t={t} />} />
@@ -54,6 +56,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
             <Route element={<ProtectedRoutes />}>
               <Route exact path="/user/:uId" element={<User />} />
+              <Route exact path="/user/post/:pId" element={<PostDetail />} />
             </Route>
           </Routes>
         </BrowserRouter>

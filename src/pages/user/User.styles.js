@@ -8,7 +8,7 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
-//User Profile ---------
+//-----------User Profile ---------
 export const UserCard = styled.div`
   height: 400px;
   background-color: white;
@@ -46,7 +46,8 @@ export const Update = styled.button`
   border: none;
   cursor: pointer;
 `;
-//Posts -------------------
+
+//------------Posts-------------------
 export const Posts = styled.div`
   flex: 4;
   background-color: white;
@@ -95,7 +96,7 @@ export const PostDate = styled.span`
   font-size: 13px;
   color: lightgray;
   font-weight: 600;
-  margin: 5px 0;
+  margin-bottom: 5px;
 `;
 export const PostTitle = styled.span`
   font-size: 1.2em;
@@ -119,7 +120,7 @@ export const PostType = styled.span`
 `;
 export const PostImgCover = styled.div`
   flex: 1;
-  height: 200px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +146,11 @@ export const PostVisible = styled.span`
   border-radius: 15px;
 `;
 export const PostButton = styled.button`
+  &:disabled {
+    cursor: not-allowed;
+  }
   background-color: ${(props) => (props.color ? props.color : '')};
+
   color: white;
   border: none;
   padding: 5px 15px;
@@ -155,7 +160,7 @@ export const PostButton = styled.button`
   border-radius: 5px;
 `;
 
-//for add new post form
+//--------------Post Form---------------------
 export const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -205,3 +210,129 @@ export const Button = styled.button`
   color: black;
   font-weight: bold;
 `;
+
+//--------------Post Details-------------------------------
+export const DetailContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: auto;
+  margin-top: 50px;
+`;
+export const Wrapper = styled.div`
+  display: flex;
+  width: 80%;
+  height: 500px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+`;
+export const ImageCover = styled.div`
+  flex: 1;
+
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: #ebebeb;
+`;
+export const DetailsWrapper = styled.div`
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+export const Title = styled.h1`
+  margin-top: 0;
+`;
+export const Price = styled.span`
+  margin: 20px 0;
+  font-size: 20px;
+  color: red;
+  font-weight: 600;
+`;
+export const Weight = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  width: 50%;
+  margin: 10px 0;
+  display: flex;
+`;
+export const ItemTitle = styled.span`
+  flex: 3;
+`;
+export const ItemValue = styled.span`
+  flex: 2;
+`;
+export const Description = styled.div`
+  margin: 20px 0;
+  margin-top: 40px;
+  text-align: justify;
+  line-height: 25px;
+`;
+export const Avail = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  width: 50%;
+  margin: 10px 0;
+
+  display: flex;
+`;
+export const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 60%;
+  position: absolute;
+  bottom: -15px;
+`;
+
+export const Icon = styled.span`
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+  padding: 3px;
+  border: 2px solid #d1d1d1;
+  border-radius: 5px;
+  & > * {
+    font-size: 40px !important;
+    color: #787878;
+  }
+`;
+export const GoBack = styled.button`
+  background-color: none;
+  color: #00009b;
+  margin: 10px 0;
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 6%;
+  font-weight: 600;
+  border: 1px solid #00009b;
+  border-radius: 5px; ;
+`;
+//-------------Comment---------------------
+export const CommentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: lightgray;
+`;
+export const CommentTitle = styled.span`
+  & > * {
+    color: black;
+    margin-right: 5px;
+  }
+  display: flex;
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: gray;
+`;
+export const Comment = styled.div``;
+export const CommentName = styled.span``;
+export const CommentText = styled.p``;

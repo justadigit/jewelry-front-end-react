@@ -123,23 +123,25 @@ const Login = () => {
         },
       })
       .then((response) => {
-        console.log('Success', response.data);
+        //console.log('Success', response.data);
         if (response.data.error) {
           toast.error(response.data.message);
         } else {
           sessionStorage.setItem('userId', response.data.userId);
           sessionStorage.setItem('name', response.data.name);
           sessionStorage.setItem('email', response.data.email);
+          sessionStorage.setItem('token', response.data.token);
           onSubmitProps.resetForm({
             email: '',
             password: '',
           });
+
           navigate('/user/' + response.data.userId);
         }
         onSubmitProps.setSubmitting(false);
       })
       .catch((error) => {
-        console.log('Error', error.message());
+        console.log('Error', error.message);
         toast.error('Something Wrong!Please Try Again!');
         onSubmitProps.setSubmitting(false);
       });

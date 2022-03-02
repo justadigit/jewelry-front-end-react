@@ -68,7 +68,7 @@ const ShopText = styled.span`
 `;
 
 const Navbar = () => {
-  const [t] = useContext(LocalContext);
+  const { t } = useContext(LocalContext);
   return (
     <Container>
       <Logo>

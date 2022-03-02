@@ -55,7 +55,7 @@ const UserNav = ({ logout }) => {
           </Home>
           <Home>
             <NavLink
-              to="/products"
+              to="/shop"
               style={{ textDecoration: 'none', color: 'black' }}
             >
               Products
