@@ -1,4 +1,4 @@
-import { FavoriteBorder, Send } from '@material-ui/icons';
+import { DeleteForever, FavoriteBorder, Send } from '@material-ui/icons';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -21,6 +21,7 @@ import {
   CommentBox,
   CommentButton,
   CommentContainer,
+  CommentDelete,
   CommentInput,
   CommentName,
   CommentText,
@@ -39,6 +40,7 @@ import {
   Wrapper,
 } from './Details.styles';
 import { toast, ToastContainer } from 'react-toastify';
+import { handleComment, handleDelete } from './DetailControls';
 
 const Details = () => {
   let { pid } = useParams();
@@ -53,47 +55,13 @@ const Details = () => {
     axios
       .get('https://jewelry-third-step.herokuapp.com/api/post/' + pid)
       .then((response) => {
-        //console.log(response.data);
+        console.log(response.data.comments);
         setProduct(response.data.post);
         setComments(response.data.comments);
         setLoading(false);
       });
   }, [pid, refreshKey]);
-  const handleComment = () => {
-    if (sessionStorage.length < 4) {
-      toast.warn('You need to Login');
-    } else {
-      axios.defaults.headers.common['Authorization'] =
-        'Bearer ' + sessionStorage.getItem('token');
-      let comment = commentInput;
-      const userId = sessionStorage.getItem('userId');
-      const name = sessionStorage.getItem('name');
-      const postId = pid;
-      let data = JSON.stringify({ comment, userId, name, postId });
-      setHold(true);
-      axios({
-        method: 'post',
-        url: 'https://jewelry-third-step.herokuapp.com/api/comment',
-        data: data,
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then((response) => {
-          console.log(response.data);
-          setRefreshKey((oldKey) => oldKey + 1);
-          setHold(false);
-          toast.info('Your comment added!');
-          setCommentInput('');
-        })
-        .catch((err) => {
-          console.log(err.message);
-          toast.error('Something Wrong!');
-        });
-      setHold(false);
-    }
-  };
+
   return (
     <>
       <HeadNavbar />
@@ -168,14 +136,30 @@ const Details = () => {
             </CommentTitle>
             {comments.map((comment) => {
               return (
-                <Comment>
-                  <div style={{ display: 'flex' }}>
-                    <CommentName>{comment.name} </CommentName>
-                    <CommentTime>
-                      <Moment fromNow>{comment.updatedAt}</Moment>
-                    </CommentTime>
+                <Comment key={comment._id}>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex' }}>
+                      <CommentName>{comment.name} </CommentName>
+                      <CommentTime>
+                        <Moment fromNow>{comment.updatedAt}</Moment>
+                      </CommentTime>
+                    </div>
+                    <CommentText>{comment.comment}</CommentText>
                   </div>
-                  <CommentText>{comment.comment}</CommentText>
+                  <CommentDelete
+                    commenterId={comment.userId}
+                    onClick={() =>
+                      handleDelete(
+                        comment.userId,
+                        comment._id,
+                        setRefreshKey,
+                        setHold,
+                        toast
+                      )
+                    }
+                  >
+                    <DeleteForever />
+                  </CommentDelete>
                 </Comment>
               );
             })}
@@ -186,7 +170,16 @@ const Details = () => {
                 onChange={(e) => setCommentInput(e.target.value)}
               ></CommentInput>
               <CommentButton
-                onClick={() => handleComment()}
+                onClick={() =>
+                  handleComment(
+                    commentInput,
+                    setCommentInput,
+                    pid,
+                    setHold,
+                    setRefreshKey,
+                    toast
+                  )
+                }
                 disabled={commentInput.length < 1 || hold}
               >
                 <Send />

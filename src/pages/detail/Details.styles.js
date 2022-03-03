@@ -120,7 +120,7 @@ export const CommentTitle = styled.span`
 `;
 export const Comment = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   padding: 5px;
   margin: 5px 0;
   -webkit-box-shadow: 5px 5px 11px -8px rgba(0, 0, 0, 0.18);
@@ -177,4 +177,19 @@ export const CommentButton = styled.button`
   border: none;
   border-radius: 5px;
   background: #007efd;
+`;
+export const CommentDelete = styled.button`
+  & > * {
+    color: lightgray;
+  }
+  background: none;
+  height: 30px;
+  display: ${(props) =>
+    props.commenterId === sessionStorage.userId ? 'flex' : 'none'};
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  & > *:hover {
+    color: #fd4053;
+  }
 `;
