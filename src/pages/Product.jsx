@@ -16,7 +16,7 @@ const Product = () => {
   const [products, setProduct] = useState([]);
   useEffect(() => {
     axios
-      .get('https://jewelry-third-step.herokuapp.com/api/posts ')
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/api/posts `)
       .then((response) => {
         setProduct(response.data.result);
         setLoading(false);

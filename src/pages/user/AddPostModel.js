@@ -65,7 +65,7 @@ const AddPostModel = ({
     axios.defaults.headers.post['Accept'] = 'application/json';
     axios({
       method: 'post',
-      url: 'https://jewelry-third-step.herokuapp.com/api/post',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/api/post`,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

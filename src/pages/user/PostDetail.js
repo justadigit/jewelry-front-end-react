@@ -92,16 +92,14 @@ const PostDetail = () => {
             >
               <div className="rimage">
                 <img
-                  src={`https://jewelry-third-step.herokuapp.com/${post.image}`}
+                  src={`${process.env.REACT_APP_API_ENDPOINT}/${post.image}`}
                   alt=""
                 />
               </div>
               {post.relatedImg.map((relatedImg, key) => (
                 <div className="rimage" key={key}>
                   <img
-                    src={
-                      `https://jewelry-third-step.herokuapp.com/` + relatedImg
-                    }
+                    src={`${process.env.REACT_APP_API_ENDPOINT}` + relatedImg}
                     alt=""
                   />
                 </div>

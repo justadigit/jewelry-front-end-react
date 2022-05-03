@@ -118,7 +118,7 @@ function Register() {
     onSubmitProps.setSubmitting(true);
     console.log('Submit', onSubmitProps);
     axios
-      .post('https://jewelry-third-step.herokuapp.com/api/auth/sign-up', data, {
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/auth/sign-up`, data, {
         headers: {
           'content-type': 'application/json',
         },

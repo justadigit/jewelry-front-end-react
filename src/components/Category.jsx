@@ -40,7 +40,7 @@ const Category = () => {
   const [categories, setcategorie] = useState([]);
   useEffect(() => {
     axios
-      .get('https://jewelry-third-step.herokuapp.com/api/categories')
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/api/categories`)
       .then((response) => {
         setcategorie(response.data.categories);
       });

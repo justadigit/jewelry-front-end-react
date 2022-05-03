@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { ErrorMessage, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ import BACK from '../images/back3.jpg';
 import TextError from './TextError';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { LocalContext } from '../App';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -100,14 +102,22 @@ const GoHome = styled.span`
   }
 `;
 const Login = () => {
+  let navigate = useNavigate();
+
+  const { loginState, setLoginState } = useContext(LocalContext);
+
   useEffect(() => {
+    console.log(loginState);
+    if (loginState === true) {
+      navigate('/');
+    }
     const register = sessionStorage.getItem('register');
     if (register) {
       toast.success(' Successfully! Please Login!');
       sessionStorage.removeItem('register');
     }
   }, []);
-  let navigate = useNavigate();
+
   const initialValues = {
     email: '',
     password: '',
@@ -117,7 +127,7 @@ const Login = () => {
     const data = JSON.stringify(values);
     onSubmitProps.setSubmitting(true);
     axios
-      .post('https://jewelry-third-step.herokuapp.com/api/auth/login', data, {
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/auth/login`, data, {
         headers: {
           'content-type': 'application/json',
         },
@@ -127,10 +137,12 @@ const Login = () => {
         if (response.data.error) {
           toast.error(response.data.message);
         } else {
+          setLoginState(true);
           sessionStorage.setItem('userId', response.data.userId);
           sessionStorage.setItem('name', response.data.name);
           sessionStorage.setItem('email', response.data.email);
           sessionStorage.setItem('token', response.data.token);
+
           onSubmitProps.resetForm({
             email: '',
             password: '',

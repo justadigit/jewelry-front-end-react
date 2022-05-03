@@ -24,7 +24,7 @@ export function handleDelete(
   setHold(true);
   axios({
     method: 'delete',
-    url: `https://jewelry-third-step.herokuapp.com/api/post/${postId}/${user.userId}`,
+    url: `${process.env.REACT_APP_API_ENDPOINT}/api/post/${postId}/${user.userId}`,
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + sessionStorage.getItem('token'),

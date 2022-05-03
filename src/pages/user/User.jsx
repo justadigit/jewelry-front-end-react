@@ -55,7 +55,7 @@ const User = () => {
     if (suserId === uId) {
       axios({
         method: 'get',
-        url: `https://jewelry-third-step.herokuapp.com/api/user/${uId}`,
+        url: `${process.env.REACT_APP_API_ENDPOINT}/api/user/${uId}`,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           Accept: 'application/json',
@@ -67,7 +67,7 @@ const User = () => {
         setCategories(response.data.categories);
       });
     } else {
-      navigate('/*');
+      navigate('');
     }
   }, [refreshKey]);
 

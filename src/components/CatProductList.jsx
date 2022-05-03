@@ -89,9 +89,7 @@ const CatProductList = ({ products }) => {
           <ProductItem key={product._id}>
             <ItemImageWrapper>
               <ItemImage
-                src={
-                  'https://jewelry-second-step.herokuapp.com/' + product.image
-                }
+                src={`${process.env.REACT_APP_API_ENDPOINT}` + product.image}
               />
             </ItemImageWrapper>
             <ItemButton>

@@ -17,7 +17,7 @@ const CategoryItem = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios
-      .get('https://jewelry-third-step.herokuapp.com/api/category/' + catId)
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/api/category/` + catId)
       .then((response) => {
         setcatProducts(response.data.items);
         setLoading(false);

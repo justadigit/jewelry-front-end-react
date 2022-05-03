@@ -41,18 +41,20 @@ i18n
 export const LocalContext = React.createContext();
 function App() {
   const { t } = useTranslation();
-  const [token, setToken] = useState(null);
+  const [loginState, setLoginState] = useState(false);
   return (
     <>
-      <LocalContext.Provider value={{ t, token, setToken }}>
+      <LocalContext.Provider value={{ t, loginState, setLoginState }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home t={t} />} />
+            <Route path="/" element={<Home />} />
             <Route path="/details/:pid" element={<Details />} />
             <Route path="/category/:catId" element={<CategoryItem />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/register" element={<Register />} />
+
             <Route path="/login" element={<Login />} />
+
             <Route path="*" element={<PageNotFound />} />
             <Route element={<ProtectedRoutes />}>
               <Route exact path="/user/:uId" element={<User />} />
